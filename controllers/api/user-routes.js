@@ -1,3 +1,4 @@
+//Bring in middleware from previous project here and other routes.
 const router = require(`express`).Router();
 const { User, Post, Comment } = require(`../../models`);
 
@@ -35,7 +36,7 @@ router.get(`/:id`, (req, res) => {
     })
         .then(dbUserData => {
             if(!dbUserData) {
-                res.status(404).json({ message: `No user was found with this id` });
+                res.status(404).json({ message: `Incorrect User ID.` });
                 return;
             }
             res.json(dbUserData);
@@ -75,14 +76,14 @@ router.post(`/login`, (req, res) => {
     })
         .then(dbUserData => {
             if(!dbUserData) {
-                res.status(404).json({ message: `No user with that username was found!` });
+                res.status(404).json({ message: `Incorrect Username. Enter Valid Username.` });
                 return;
             }
 
             const validPassword = dbUserData.checkPassword(req.body.password);
 
             if(!validPassword) {
-                res.status(400).json({ message: `Incorrect Password!` });
+                res.status(400).json({ message: `Password Does Not Match User.` });
                 return;
             }
 
@@ -90,7 +91,7 @@ router.post(`/login`, (req, res) => {
                 req.session.user_id = dbUserData.id;
                 req.session.username = dbUserData.username;
                 req.session.loggedIn = true;
-                res.json({ user: dbUserData, message: `You are now logged in!` });
+                res.json({ user: dbUserData, message: `Logged In Successfully.` });
             });
         });
 });
@@ -114,7 +115,7 @@ router.put(`/:id`, (req, res) => {
     })
         .then(dbUserData => {
             if(!dbUserData) {
-                res.status(404).json({ message: `No user was found with this id` });
+                res.status(404).json({ message: `Incorrect User ID.` });
                 return;
             }
             res.json(dbUserData);
@@ -133,7 +134,7 @@ router.delete(`/:id`, (req, res) => {
     })
         .then(dbUserData => {
             if(!dbUserData) {
-                res.status(404).json({ message: `No user was found with this id` })
+                res.status(404).json({ message: `Incorrect User ID.` })
                 return;
             }
             res.json(dbUserData);
