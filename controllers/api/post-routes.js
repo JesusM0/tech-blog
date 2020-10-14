@@ -1,28 +1,28 @@
-const router = require(`express`).Router();
-const { Post, User, Comment } =  require(`../../models`);
-const withAuth = require(`../../utils/auth`);
+const router = require('express').Router();
+const { Post, User, Comment } =  require('../../models');
+const withAuth = require('../../utils/auth');
 
-router.get(`/`, (req, res) => {
+router.get('/', (req, res) => {
     Post.findAll({
         attributes: [
-            `id`,
-            `title`,
-            `post_description`,
-            `created_at`
+            'id',
+            'title',
+            'post_description',
+            'created_at'
         ],
-        order: [[`created_at`, `DESC`]],
+        order: [['created_at', 'DESC']],
         include: [
             {
                 model: Comment,
-                attributes: [`id`, `comment_text`, `post_id`, `user_id`, `created_at`],
+                attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
                 include: {
                     model: User,
-                    attributes: [`username`]
+                    attributes: ['username']
                 }
             },
             {
                 model: User,
-                attributes: [`username`]
+                attributes: ['username']
             }
         ]
     })
@@ -33,35 +33,35 @@ router.get(`/`, (req, res) => {
         });
 });
 
-router.get(`/:id`, (req, res) => {
+router.get('/:id', (req, res) => {
     Post.findOne({
         where: {
             id: req.params.id
         },
         attributes: [
-            `id`,
-            `title`,
-            `post_description`,
-            `created_at`
+            'id',
+            'title',
+            'post_description',
+            'created_at'
         ],
         include: [
             {
                 model: Comment,
-                attributes: [`id`, `comment_text`, `post_id`, `user_id`, `created_at`],
+                attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
                 include: {
                     model: User,
-                    attributes: [`username`]
+                    attributes: ['username']
                 }
             },
             {
                 model: User,
-                attributes: [`username`]
+                attributes: ['username']
             }
         ]
     })
         .then(dbPostData => {
             if(!dbPostData) {
-                res.status(404).json({ message: `No post was found with this id` });
+                res.status(404).json({ message: 'No post was found with this id' });
                 return;
             }
             res.json(dbPostData);
@@ -72,7 +72,7 @@ router.get(`/:id`, (req, res) => {
         });
 });
 
-router.post(`/`, withAuth, (req, res) => {
+router.post('/', withAuth, (req, res) => {
     Post.create({
         title: req.body.title,
         post_description: req.body.post_description,
@@ -85,7 +85,7 @@ router.post(`/`, withAuth, (req, res) => {
         });
 });
 
-router.put(`/:id`, withAuth, (req, res) => {
+router.put('/:id', withAuth, (req, res) => {
     Post.update(
         {
             title: req.body.title
@@ -98,7 +98,7 @@ router.put(`/:id`, withAuth, (req, res) => {
     )
         .then(dbPostData => {
             if(!dbPostData) {
-                res.status(404).json({ message: `Incorrect Post ID.` });
+                res.status(404).json({ message: 'Incorrect Post ID.' });
                 return;
             }
             res.json(dbPostData);
@@ -109,7 +109,7 @@ router.put(`/:id`, withAuth, (req, res) => {
         });
 });
 
-router.delete(`/:id`, withAuth, (req, res) => {
+router.delete('/:id', withAuth, (req, res) => {
     Post.destroy({
         where: {
             id: req.params.id
@@ -117,7 +117,7 @@ router.delete(`/:id`, withAuth, (req, res) => {
     })
         .then(dbPostData => {
             if(!dbPostData) {
-                res.status(404).json({ message: `Incorrect Post ID.` });
+                res.status(404).json({ message: 'Incorrect Post ID.' });
                 return;
             }
             res.json(dbPostData);

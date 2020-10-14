@@ -64,7 +64,7 @@ router.get('/post/:id', (req, res) => {
   })
     .then((dbPostData) => {
       if (!dbPostData) {
-        res.status(404).json({ message: `Incorrect Post ID.` });
+        res.status(404).json({ message: 'Incorrect Post ID.' });
         return;
       }
       const post = dbPostData.get({ plain: true });

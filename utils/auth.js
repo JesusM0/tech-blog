@@ -1,7 +1,7 @@
 //WithAuth should work from previous project...I hope.
 const withAuth = (req, res, next) => {
   if (!req.session.user_id) {
-    res.redirect(`/login`);
+    res.redirect('/login');
   } else {
     next();
   }

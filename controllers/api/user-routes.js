@@ -1,10 +1,10 @@
 //Bring in middleware from previous project here and other routes.
-const router = require(`express`).Router();
-const { User, Post, Comment } = require(`../../models`);
+const router = require('express').Router();
+const { User, Post, Comment } = require('../../models');
 
-router.get(`/`, (req, res) => {
+router.get('/', (req, res) => {
   User.findAll({
-    attributes: { exclude: [`password`] },
+    attributes: { exclude: ['password'] },
   })
     .then((dbUserData) => res.json(dbUserData))
     .catch((err) => {
@@ -13,30 +13,30 @@ router.get(`/`, (req, res) => {
     });
 });
 
-router.get(`/:id`, (req, res) => {
+router.get('/:id', (req, res) => {
   User.findOne({
-    attributes: { exclude: [`password`] },
+    attributes: { exclude: ['password'] },
     where: {
       id: req.params.id,
     },
     include: [
       {
         model: Post,
-        attributes: [`id`, `title`, `post_description`, `created_at`],
+        attributes: ['id', 'title', 'post_description', 'created_at'],
       },
       {
         model: Comment,
-        attributes: [`id`, `comment_text`, `created_at`],
+        attributes: ['id', 'comment_text', 'created_at'],
         include: {
           model: Post,
-          attributes: [`title`],
+          attributes: ['title'],
         },
       },
     ],
   })
     .then((dbUserData) => {
       if (!dbUserData) {
-        res.status(404).json({ message: `Incorrect User ID.` });
+        res.status(404).json({ message: 'Incorrect User ID.' });
         return;
       }
       res.json(dbUserData);
@@ -47,7 +47,7 @@ router.get(`/:id`, (req, res) => {
     });
 });
 
-router.post(`/`, (req, res) => {
+router.post('/', (req, res) => {
   User.create({
     username: req.body.username,
     email: req.body.email,
@@ -68,7 +68,7 @@ router.post(`/`, (req, res) => {
     });
 });
 
-router.post(`/login`, (req, res) => {
+router.post('/login', (req, res) => {
   User.findOne({
     where: {
       username: req.body.username,
@@ -77,14 +77,14 @@ router.post(`/login`, (req, res) => {
     if (!dbUserData) {
       res
         .status(404)
-        .json({ message: `Incorrect Username. Enter Valid Username.` });
+        .json({ message: 'Incorrect Username. Enter Valid Username.' });
       return;
     }
 
     const validPassword = dbUserData.checkPassword(req.body.password);
 
     if (!validPassword) {
-      res.status(400).json({ message: `Password Does Not Match User.` });
+      res.status(400).json({ message: 'Password Does Not Match User.' });
       return;
     }
 
@@ -92,12 +92,12 @@ router.post(`/login`, (req, res) => {
       req.session.user_id = dbUserData.id;
       req.session.username = dbUserData.username;
       req.session.loggedIn = true;
-      res.json({ user: dbUserData, message: `Logged In Successfully.` });
+      res.json({ user: dbUserData, message: 'Logged In Successfully.' });
     });
   });
 });
 
-router.post(`/logout`, (req, res) => {
+router.post('/logout', (req, res) => {
   if (req.session.loggedIn) {
     req.session.destroy(() => {
       res.status(204).end();
@@ -107,7 +107,7 @@ router.post(`/logout`, (req, res) => {
   }
 });
 
-router.put(`/:id`, (req, res) => {
+router.put('/:id', (req, res) => {
   User.update(req.body, {
     individualHooks: true,
     where: {
@@ -116,7 +116,7 @@ router.put(`/:id`, (req, res) => {
   })
     .then((dbUserData) => {
       if (!dbUserData) {
-        res.status(404).json({ message: `Incorrect User ID.` });
+        res.status(404).json({ message: 'Incorrect User ID.' });
         return;
       }
       res.json(dbUserData);
@@ -127,7 +127,7 @@ router.put(`/:id`, (req, res) => {
     });
 });
 
-router.delete(`/:id`, (req, res) => {
+router.delete('/:id', (req, res) => {
   User.destroy({
     where: {
       id: req.params.id,
@@ -135,7 +135,7 @@ router.delete(`/:id`, (req, res) => {
   })
     .then((dbUserData) => {
       if (!dbUserData) {
-        res.status(404).json({ message: `Incorrect User ID.` });
+        res.status(404).json({ message: 'Incorrect User ID.' });
         return;
       }
       res.json(dbUserData);
