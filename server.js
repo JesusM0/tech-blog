@@ -11,15 +11,15 @@ const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const sess = {
-  secret: 'A Future Is Not Given To You.  It Is Something You Must Take For Yourself.',
+  secret: 'Psst. Hey, You. Yeah, you. Ssssssecret.',
   cookie: {
-    maxAge: (1000 * 60) * 60
+    maxAge: 1000 * 60 * 60,
   },
   resave: false,
   saveUninitialized: true,
   store: new SequelizeStore({
-    db: sequelize
-  })
+    db: sequelize,
+  }),
 };
 
 app.use(session(sess));
@@ -38,5 +38,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(routes);
 
 sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => console.log(`Server Now Listening On ${PORT}.`));
-})
+  app.listen(PORT, () => console.log(`Now listening on port ${PORT}.`));
+});

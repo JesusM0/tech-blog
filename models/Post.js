@@ -9,7 +9,7 @@ Post.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     title: {
       type: DataTypes.STRING,
@@ -24,15 +24,15 @@ Post.init(
       allowNull: false,
       references: {
         model: 'user',
-        key: 'id'
-      }
-    }
+        key: 'id',
+      },
+    },
   },
   {
     sequelize,
     freezeTableName: true,
     underscored: true,
-    modelName: 'post'
+    modelName: 'post',
   }
 );
 

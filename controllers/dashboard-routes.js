@@ -1,10 +1,13 @@
 const router = require('express').Router();
-const sequelize = require('../config/connection');
+const withAuth = require('../utils/auth');
 const { Post, User, Comment } = require('../models');
 
-router.get('/', (req, res) => {
+router.get('/', withAuth, (req, res) => {
   Post.findAll({
-    attributes: ['id', 'post_description', 'title', 'created_at'],
+    where: {
+      user_id: req.session.user_id,
+    },
+    attributes: ['id', 'title', 'post_description', 'created_at'],
     include: [
       {
         model: Comment,
@@ -22,10 +25,7 @@ router.get('/', (req, res) => {
   })
     .then((dbPostData) => {
       const posts = dbPostData.map((post) => post.get({ plain: true }));
-      res.render('homepage', {
-        posts,
-        loggedIn: req.session.loggedIn,
-      });
+      res.render('dashboard', { posts, loggedIn: req.session.loggedIn });
     })
     .catch((err) => {
       console.log(err);
@@ -33,20 +33,12 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/login', (req, res) => {
-  if (req.session.loggedIn) {
-    res.redirect('/');
-    return;
-  }
-  res.render('login');
-});
-
-router.get('/post/:id', (req, res) => {
+router.get('/edit/:id', withAuth, (req, res) => {
   Post.findOne({
     where: {
       id: req.params.id,
     },
-    attributes: ['id', 'post_description', 'title', 'created_at'],
+    attributes: ['id', 'title', 'post_description', 'created_at'],
     include: [
       {
         model: Comment,
@@ -64,11 +56,13 @@ router.get('/post/:id', (req, res) => {
   })
     .then((dbPostData) => {
       if (!dbPostData) {
-        res.status(404).json({ message: `Incorrect Post ID.` });
+        res.status(404).json({ message: 'Incorrect Post ID.' });
         return;
       }
+
       const post = dbPostData.get({ plain: true });
-      res.render('single-post', {
+
+      res.render('edit-post', {
         post,
         loggedIn: req.session.loggedIn,
       });
