@@ -31,7 +31,7 @@ a:hover {
 }
 
 button {
-  background-color: #225ca3;
+  background-color: var(--primary);
   border: 0;
   padding: 1.2rem;
   color: white;
@@ -46,6 +46,7 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 0 1%;
+  background-color: var(--tertiary);
 }
 
 main {
@@ -101,4 +102,12 @@ main {
   margin: 0;
   padding: 16px 16px 32px;
   color: aliceblue;
+}
+
+.delete-post-btn {
+  background-color: var(--primary);
+}
+
+.delete-post-btn:hover {
+  background-color: var(--secondary);
 }

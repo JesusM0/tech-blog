@@ -5,11 +5,12 @@ async function editFormHandler(event) {
   const id = window.location.toString().split('/')[
     window.location.toString().split('/').length - 1
   ];
-  const postDescription = document
+
+  const post_description = document
     .querySelector('#post-description')
     .value.trim();
 
-  const response = await fetch(`/api/posts/${id}`, {
+  const response = await fetch('/api/posts/${id}', {
     method: 'PUT',
     body: JSON.stringify({
       title,
