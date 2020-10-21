@@ -2,7 +2,7 @@ async function newPostFormHandler(event) {
   event.preventDefault();
 
   const title = document.querySelector('#post-title').value.trim();
-  const postDescription = document
+  const post_description = document
     .querySelector('#post-description')
     .value.trim();
 
@@ -10,7 +10,7 @@ async function newPostFormHandler(event) {
     method: 'POST',
     body: JSON.stringify({
       title,
-      post_text,
+      post_description,
     }),
     headers: {
       'Content-Type': 'application/json',
