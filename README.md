@@ -13,6 +13,11 @@
 - [Usage](#Usage)
 - [License](#License)
 
+## Screenshots
+![Homepage](./img/edit.png)
+![Notes page](./img/homepage.png)
+![Notes page](./img/login.png)
+
 ## Heroku
 https://tech-blogdas.herokuapp.com/
 
